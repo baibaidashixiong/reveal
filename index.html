@@ -11,14 +11,10 @@
 			  font-family: 'Source Serif Pro', 'Songti SC', 'SimSun', 'Serif', serif;
 			}
 		  </style>
-	<style>
-			
-			
+		<style>		
 			.reveal .slides {
 			  border: 1.5px #ddd solid;
 			  border-radius: 7px;
-			  text-align: left;
-			  font-weight: 300;
 			}
 			
 			.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
@@ -158,7 +154,7 @@
 						&emsp;&emsp;&emsp;&emsp;汇报人：朱奇正</h4>
 					</div>
 				</section>
-				<section data-background-image="images/background.jpeg" data-background-size="1800px">
+				<section data-background-image="images/背景.png" data-background-size="1700px">
 					<section data-markdown>
 					<div text-align: left>
 					<textarea data-template>
@@ -176,16 +172,71 @@
 					<textarea data-template>
 						### Yocto
 						-  Yocto是什么？ <br>
-							类似于[LFS](https://www.linuxfromscratch.org/lfs/)的集成化工具。<br>
+							类似于[LFS(Linux From Scratch)](https://www.linuxfromscratch.org/lfs/)的集成化工具。<br>
 							[一个能够一键生成操作系统镜像，sdk等的开发工具](https://docs.yoctoproject.org/).<br>
+						---
+						### Yocto
 						-  Yocto中涉及什么？<br>
-							涉及的范围很广（却不深），包括众多的编译工具([autotools](https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html)，)
+							涉及的范围很广（却不深）
+							- 包括众多的编译工具([autotools](https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html)，[cmake](https://cmake.org/)，[ninja](https://ninja-build.org/)等)。
+							- 完整的编译的流程(Native Compile，Cross Compile，[Canadian Cross Compile](https://en.wikipedia.org/wiki/Cross_compiler#Canadian_Cross))
+							- 整个操作系统的启动流程(pmon，[uefi](https://en.wikipedia.org/wiki/UEFI)，[initramfs](https://en.wikipedia.org/wiki/Initial_ramdisk)，[rootfs](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)，[kernel](https://en.wikipedia.org/wiki/Linux_kernel)等)
+							- 一系列构建系统所需要的软件包([Binutils](https://en.wikipedia.org/wiki/GNU_Binutils)，[Glibc](https://en.wikipedia.org/wiki/Glibc)，[Ncurses](https://en.wikipedia.org/wiki/Ncurses)等)
+							- ...
+						---
+						### Yocto工作流程
+						![Yocto工作流程](./images/yp-how-it-works-new-diagram.png)
+						---
+						### Yocto
+						- 所做的工作
+							- 学习yocto的使用方法，构建原理
+							- 在loongarch的服务器上部署docker
+							- 重新梳理旧版loongos的yocto项目，使之能够一键构建成loongarch架构的可正常运行的weston镜像以及sdk。
+							```
+							bitbake loongos-weston
+							bitbake -c populate_sdk meta-toolchain-loongos-sdk
+							```
+							- 参与了一部分新版loongos的构建工作
 					  </textarea>
-					</section>
-					<section> Slide 2.1</section>
-					
+					</section>	
 				</section>
-				
+				<section data-background-image="images/background.jpeg" data-background-size="1800px">
+					<section data-markdown>
+						<textarea data-template>
+							### CI(Continuous integration)
+							- 维护的代码库<br>
+							&emsp;[poky](https://github.com/foxsen/poky)&emsp;&emsp;[meta-loongson](https://github.com/foxsen/meta-loongson)
+							- 自动构建(包括代码库的更新，每日的自动构建等)
+							- 构建成功后自动进行功能测试
+							---
+							### CI
+							- 主要选用buildbot作为构建引擎
+							---
+							### CI自动测试示例
+							```python
+							def test_reboot(self):
+								output = ''
+								count = 0
+								(status, output) = self.target.run('reboot -h')
+								while count < 5:
+									time.sleep(5)
+									cmd = 'ping -c 1 %s' % self.target.ip
+									proc = Popen(cmd, shell=True, stdout=PIPE)
+									output += proc.communicate()[0].decode('utf-8')
+									if proc.poll() == 0:
+										count += 1
+									else:
+										count = 0
+								msg = ('Expected 5 consecutive, got %d.\n'
+								   	'ping output is:\n%s' % (count,output))
+								self.assertEqual(count, 5, msg = msg)
+							```
+						</textarea>
+					</section>
+				</section>
+				<section data-background-image="images/尾页.png" data-background-size="1700px">
+
+				</section>
 			</div>
 		</div>
 

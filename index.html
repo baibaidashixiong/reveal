@@ -209,8 +209,23 @@
 							- 自动构建(包括代码库的更新，每日的自动构建等)
 							- 构建成功后自动进行功能测试
 							---
-							### CI
-							- 主要选用buildbot作为构建引擎
+							### CI(Continuous integration)
+							- 主要选用[buildbot](http://docs.buildbot.net/current/tutorial/)作为构建引擎
+							- 以yocto社区中的autobuilder系统作为loongos的CI基础
+							---
+							### buildbot工作流程
+							![buildbot工作流程](./images/buildbot.png)
+							---
+							### CI自动构建示例
+							```python
+							targets = utils.getconfigvar("BBTARGETS", ourconfig, args.target, stepnum)
+							if targets:
+								if jcfg:
+									addstepentry("build-targets", "Build targets", shortdesc, desc, str(targets), str(stepnum))
+								elif args.stepname == "build-targets":
+									hp.printheader("Step %s/%s: Running bitbake %s" % (stepnum, maxsteps, targets))
+									bitbakecmd(args.builddir, "bitbake %s -k" % targets, report, stepnum, args.stepname)
+							```
 							---
 							### CI自动测试示例
 							```python
@@ -231,8 +246,50 @@
 								   	'ping output is:\n%s' % (count,output))
 								self.assertEqual(count, 5, msg = msg)
 							```
+							---
+							### CI(Continuous integration)
+							- 所做的工作
+								- 大致了解了整个autobuilder系统的运行原理
+								- 在本地初步构建了autobuilder系统
 						</textarea>
 					</section>
+				</section>
+				<section data-background-image="images/background.jpeg" data-background-size="1800px">
+					<section data-markdown>
+						<textarea data-template>
+							### xv6
+							- 完成实验进度(7/10)...
+						</textarea>
+					</section>
+				</section>
+				<section data-background-image="images/background.jpeg" data-background-size="1800px">
+					<section data-markdown data-auto-animate>
+						<textarea data-template>
+						### 总结与不足
+						---
+						### 总结与不足
+						- 对整个操作系统有了一个较为完整和全面的认识
+						- 懂得了如何更加高效的学习（读手册，读源码，多写，多试）
+						- 在工作过程中做的还不够彻底，学的不够透彻
+						- 与他人之间沟通交流不足
+						</textarea>
+					</section>
+				</section>
+				<section data-background-image="images/background.jpeg" data-background-size="1800px">
+					<section data-markdown data-auto-animate>
+						<textarea data-template>
+						### 展望
+						---
+						### 展望
+						- 在工作中完成的更好
+						- 在学习中学的更加透彻
+						- 在空余时间完成更多的实验（[CS 144](https://cs144.github.io/)，[PA实验](https://nju-projectn.github.io/ics-pa-gitbook/ics2022/)等）
+						- 与他人进行更多的沟通，交流与学习
+						</textarea>
+					</section>
+				</section>
+				<section data-background-image="images/background.jpeg" data-background-size="1800px">
+					<h2 >&emsp;&emsp;&emsp;&emsp;谢谢！</h2>
 				</section>
 				<section data-background-image="images/尾页.png" data-background-size="1700px">
 
